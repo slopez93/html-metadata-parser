@@ -3,6 +3,7 @@ import { parse as HTML, HTMLElement } from "node-html-parser";
 
 interface Meta {
     title?: string;
+    favicon?: string;
     description?: string,
     image?: string
     url?: string,
@@ -32,6 +33,11 @@ const parse = async (url: string, config?: AxiosRequestConfig) => {
     const canonical = $.querySelector('link[rel=canonical]');
     if (canonical) {
         meta.url = canonical.getAttribute('href');
+    }
+
+    const icon = $.querySelector('link[rel=icon]');
+    if (canonical) {
+        meta.favicon = icon.getAttribute('href');
     }
 
 

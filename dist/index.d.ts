@@ -1,6 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 interface Meta {
     title?: string;
+    favicon?: string;
     description?: string;
     image?: string;
     url?: string;

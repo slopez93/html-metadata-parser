@@ -1,1 +1,54 @@
-(()=>{"use strict";var e={376:e=>{e.exports=require("axios")},514:e=>{e.exports=require("node-html-parser")}},t={};function r(o){var s=t[o];if(void 0!==s)return s.exports;var a=t[o]={exports:{}};return e[o](a,a.exports,r),a.exports}var o={};(()=>{var e=o;Object.defineProperty(e,"__esModule",{value:!0}),e.parser=e.parse=void 0;const t=r(376),s=r(514),a=(e,t)=>(e.getAttribute("name")||e.getAttribute("property"))==t?e.getAttribute("content"):null,i=async(e,r)=>{if(!/(^http(s?):\/\/[^\s$.?#].[^\s]*)/i.test(e))return{};const{data:o}=await t.default(e,r),i=s.parse(o),l={},n={},u=[],c=i.querySelector("title");c&&(n.title=c.text);const p=i.querySelector("link[rel=canonical]");p&&(n.url=p.getAttribute("href"));const g=i.querySelectorAll("meta");for(let e=0;e<g.length;e++){const t=g[e];["title","description","image"].forEach((e=>{const r=a(t,e);r&&(n[e]=r)})),["og:title","og:description","og:image","og:url","og:site_name","og:type"].forEach((e=>{const r=a(t,e);r&&(l[e.split(":")[1]]=r)}))}return i.querySelectorAll("img").forEach((t=>{let r=t.getAttribute("src");r&&(r=new URL(r,e).href,u.push({src:r}))})),{meta:n,og:l,images:u}};e.parse=i;const l=i;e.parser=l,e.default=l})();var s=exports;for(var a in o)s[a]=o[a];o.__esModule&&Object.defineProperty(s,"__esModule",{value:!0})})();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.parser = exports.parse = void 0;
+const axios_1 = require("axios");
+const node_html_parser_1 = require("node-html-parser");
+const readMT = (el, name) => {
+    var prop = el.getAttribute('name') || el.getAttribute('property');
+    return prop == name ? el.getAttribute('content') : null;
+};
+const parse = async (url, config) => {
+    if (!/(^http(s?):\/\/[^\s$.?#].[^\s]*)/i.test(url))
+        return {};
+    const { data } = await axios_1.default(url, config);
+    const $ = node_html_parser_1.parse(data);
+    const og = {}, meta = {}, images = [];
+    const title = $.querySelector('title');
+    if (title)
+        meta.title = title.text;
+    const canonical = $.querySelector('link[rel=canonical]');
+    if (canonical) {
+        meta.url = canonical.getAttribute('href');
+    }
+    const icon = $.querySelector('link[rel=icon]');
+    if (canonical) {
+        meta.favicon = icon.getAttribute('href');
+    }
+    const metas = $.querySelectorAll('meta');
+    for (let i = 0; i < metas.length; i++) {
+        const el = metas[i];
+        ['title', 'description', 'image'].forEach(s => {
+            const val = readMT(el, s);
+            if (val)
+                meta[s] = val;
+        });
+        ['og:title', 'og:description', 'og:image', 'og:url', 'og:site_name', 'og:type'].forEach(s => {
+            const val = readMT(el, s);
+            if (val)
+                og[s.split(':')[1]] = val;
+        });
+    }
+    $.querySelectorAll('img').forEach(el => {
+        let src = el.getAttribute('src');
+        if (src) {
+            src = new URL(src, url).href;
+            images.push({ src });
+        }
+    });
+    return { meta, og, images };
+};
+exports.parse = parse;
+const parser = parse;
+exports.parser = parser;
+exports.default = parser;
+//# sourceMappingURL=index.js.map
