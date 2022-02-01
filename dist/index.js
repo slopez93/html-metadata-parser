@@ -21,8 +21,12 @@ const parse = async (url, config) => {
         meta.url = canonical.getAttribute('href');
     }
     const icon = $.querySelector('link[rel=icon]');
-    if (canonical) {
+    const shortCoutIcon = $.querySelector('link[rel="shortcut icon"]');
+    if (icon) {
         meta.favicon = icon.getAttribute('href');
+    }
+    else if (shortCoutIcon) {
+        meta.favicon = shortCoutIcon.getAttribute('href');
     }
     const metas = $.querySelectorAll('meta');
     for (let i = 0; i < metas.length; i++) {

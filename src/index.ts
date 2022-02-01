@@ -36,8 +36,11 @@ const parse = async (url: string, config?: AxiosRequestConfig) => {
     }
 
     const icon = $.querySelector('link[rel=icon]');
-    if (canonical) {
+    const shortCoutIcon = $.querySelector('link[rel="shortcut icon"]');
+    if (icon) {
         meta.favicon = icon.getAttribute('href');
+    } else if (shortCoutIcon) {
+        meta.favicon = shortCoutIcon.getAttribute('href');
     }
 
 
